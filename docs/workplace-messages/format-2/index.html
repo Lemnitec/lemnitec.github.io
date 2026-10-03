@@ -1,0 +1,638 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create workplace messages with AI | Lemnitec</title><meta name="description" content="Create importable MyGreeting workplace messages with AI. Download the Markdown guide, copy a prompt and learn the exact JSON format."><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/docs/workplace-messages/format-2/guide.css"></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><nav class="nav" aria-label="Main navigation"><a class="brand" href="/">Lemnitec</a><div class="nav-links"><a href="/docs/installation/">Install</a><a href="/docs/admin/">Admin guide</a><a href="/support/">Support</a></div></nav></header><main id="main"><section class="hero"><div class="hero-inner"><div class="eyebrow">MyGreeting · import format 2</div><h1>Create workplace messages with AI</h1><p class="lead">Download one guide, tell your AI assistant what your company needs, and import the resulting message collection into SharePoint.</p><div class="actions"><a class="button" href="MyGreeting-AI-guide.md" download="MyGreeting-AI-guide.md">Download AI guide (.md)</a><button class="button secondary" type="button" data-copy-prompt>Copy AI prompt</button><a class="button secondary" href="#start-here">How it works</a></div></div></section><div class="content guide-layout"><aside class="guide-contents"><nav aria-label="On this page"><strong>On this page</strong><a href="#start-here">Start here</a><a href="#ready-to-copy-prompt">Ready-to-copy prompt</a><a href="#what-you-decide">What you decide</a><a href="#time-zones-choose-the-right-meaning">Time zones: choose the right meaning</a><a href="#the-file-the-app-accepts">The file the app accepts</a><a href="#scheduling-recipes">Scheduling recipes</a><a href="#holidays-personal-events-and-links">Holidays, personal events and links</a><a href="#complete-example-collection">Complete example collection</a><a href="#ai-delivery-checklist">AI delivery checklist</a><a href="#import-results-and-recovery">Import results and recovery</a><a href="#version-and-maintenance">Version and maintenance</a></nav></aside><article class="guide-body"><p><strong>Import format: 2 · Minimum app version: 1.15.1 · Checked with app version: 1.15.3 · Updated: 3 October 2026</strong></p>
+<p>Create a whole message collection with ChatGPT or another AI assistant, then import the resulting JSON into MyGreeting. This guide is for company administrators and AI assistants. It describes the format the app actually accepts.</p>
+<p>You do not need to learn JSON to use the AI route. Decide what employees should see and when. The assistant fills in the technical fields using the rules below.</p>
+<h2 id="start-here">Start here</h2>
+<ol type="1">
+<li>Download this Markdown guide (<code>MyGreeting-AI-guide.md</code>).</li>
+<li>Upload the guide to ChatGPT or another assistant that can read text files. A website link alone may not be accessible to every assistant; uploading the file is more reliable.</li>
+<li>Copy the prompt below, fill in what you know, and ask for your collection. The assistant should ask only for missing information that changes the messages or schedule.</li>
+<li>Ask it to provide a downloadable <code>.json</code> file. Review its plain-language schedule summary before importing.</li>
+<li>In SharePoint, edit the page, select MyGreeting, open <strong>Edit properties → Workplace messages</strong>, and connect or create the message list.</li>
+<li>Choose <strong>Import messages</strong>, select the JSON file, and read the result. Save/publish the homepage if you changed its list connection, then reload the page.</li>
+</ol>
+<p>The Markdown guide is an instruction file. <strong>Import messages accepts the generated JSON file, not this Markdown file.</strong> MyGreeting validates the whole collection before adding records. It does not offer a separate pre-import preview in the current release, so review the assistant’s summary first.</p>
+<h2 id="ready-to-copy-prompt">Ready-to-copy prompt</h2>
+<p>Upload this guide, then paste the following. Replace the bracketed entries you know; you can leave others for the assistant to ask about.</p>
+<!-- AI_PROMPT_START -->
+
+<label class="prompt-label" for="ai-prompt">Copy this prompt after uploading the guide to your AI assistant.</label><textarea id="ai-prompt" rows="14" readonly>Read the attached MyGreeting guide and create an importable workplace-message collection using its exact version 2 format.
+
+Company or audience: [who the messages are for]
+Country and language: [country; preferred language and tone]
+Period: [year and when the collection should start]
+Messages to include: [holidays, seasons, Monday encouragement, lunch, timesheets, company events, or your own ideas]
+Working days and hours: [for example Monday–Friday, lunch 12:00–13:00]
+Time zone: [each viewer’s local time, or a named fixed time zone]
+Links: [real destinations, or no links]
+
+Ask only for missing information that affects the content or schedule. Use the guide’s defaults for the technical fields. Do not invent company URLs or events. Verify dates for movable holidays for the requested year; if you cannot verify them, ask me for the dates. Do not create global birthday messages for individual employees.
+
+First show a concise table of the messages, priorities, dates, times, recurrence and links so I can review the collection. Then provide one downloadable .json file containing only the approved or requested messages, using the exact field names and complete message/schedule objects in this guide. If file creation is unavailable, provide one valid JSON code block I can save as a .json file.
+
+Before delivering, check all required fields, allowed choices, date/time boundaries and recurrence patterns against this guide. Do not use the proposed version 3 format, comments, placeholders, abbreviated schedule objects or unsupported fields.</textarea><div class="actions"><button class="button" type="button" data-copy-prompt>Copy AI prompt</button></div><p id="copy-status" role="status" aria-live="polite"></p>
+<!-- AI_PROMPT_END -->
+
+<h2 id="what-you-decide">What you decide</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Choice</th>
+<th>Available options</th>
+<th>Suggested starting point</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Message text</td>
+<td>Your sentence, up to 255 characters</td>
+<td>Keep it short; it appears alongside a personalised greeting.</td>
+</tr>
+<tr class="even">
+<td>Emoji</td>
+<td>One emoji or none</td>
+<td>Use an emoji that fits the message.</td>
+</tr>
+<tr class="odd">
+<td>Priority</td>
+<td><code>Normal</code> / <code>Important</code></td>
+<td>Normal for everyday messages; Important for occasions that should take precedence.</td>
+</tr>
+<tr class="even">
+<td>Show</td>
+<td>Always / Scheduled</td>
+<td>Always for general encouragement; Scheduled for occasions and reminders.</td>
+</tr>
+<tr class="odd">
+<td>Whole day</td>
+<td>Yes / No</td>
+<td>Yes for holidays; No for lunchtime or afternoon reminders.</td>
+</tr>
+<tr class="even">
+<td>Repeat</td>
+<td>Off / every X days, weeks, months or years</td>
+<td>Weekly for weekdays; yearly for fixed-date occasions.</td>
+</tr>
+<tr class="odd">
+<td>Repeat pattern</td>
+<td>Weekdays / calendar date / first, second, third, fourth or last weekday</td>
+<td>Pick the pattern that matches the real event.</td>
+</tr>
+<tr class="even">
+<td>Series end</td>
+<td>No end / an inclusive final date</td>
+<td>Leave unset unless the collection should stop.</td>
+</tr>
+<tr class="odd">
+<td>Time zone</td>
+<td>Each viewer’s local time / a fixed IANA zone</td>
+<td>Viewer-local for local lunch and working hours.</td>
+</tr>
+<tr class="even">
+<td>Link</td>
+<td>None / an actual HTTPS or site-relative destination</td>
+<td>Leave empty unless you know the destination.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rotation and priority:</strong> eligible Normal and Important messages are compared by priority. If an Important message is eligible, Normal workplace messages are not selected. Messages at the highest eligible priority rotate on page reload; Always and Scheduled can rotate together. Put two messages at the same priority if you want them to rotate together. There is no automatic timed refresh; an already-open page keeps its selected message until reload.</p>
+<p>Birthday, work-anniversary and new-starter greetings use MyGreeting’s personal-moment settings and retain their precedence. The setting for showing a subtitle during personal moments determines whether a workplace message is also visible. Workplace text does not substitute employee-name placeholders such as <code>{name}</code>; the greeting itself already provides the employee’s name.</p>
+<h2 id="time-zones-choose-the-right-meaning">Time zones: choose the right meaning</h2>
+<ul>
+<li><strong>Viewer-local:</strong> 12:00 means noon in each viewer’s device time zone. People in Amsterdam and New York see the lunch reminder at their own noon. Travel or a device-zone change affects the next page-load selection.</li>
+<li><strong>Fixed zone:</strong> 12:00 in <code>Europe/Amsterdam</code> is one shared time window. Someone in New York sees it at the corresponding local time, not at their own noon.</li>
+</ul>
+<p>Set <code>timeZoneMode</code> explicitly for new collections. Use <code>viewer</code> for the first option and <code>fixed</code> for the second. Always include a valid <code>timeZone</code> string. With viewer-local schedules, <code>UTC</code> is a valid unused placeholder; the device’s time zone controls eligibility. With fixed schedules, use the real zone, for example <code>Europe/Amsterdam</code>, <code>Europe/London</code>, <code>America/New_York</code> or <code>UTC</code>. Do not use Windows labels such as <code>W. Europe Standard Time</code>, a fixed UTC offset, or abbreviations such as <code>CET</code> as your IANA zone choice. Named zones handle daylight-saving changes.</p>
+<h2 id="the-file-the-app-accepts">The file the app accepts</h2>
+<p>The JSON envelope has two required properties: <code>version</code> must be the number <code>2</code>, and <code>messages</code> must be an array of complete message objects. Use double quotes for strings, real JSON booleans (<code>true</code>/<code>false</code>), no comments and no trailing commas. A Markdown code fence is not part of a saved JSON file.</p>
+<p>Each message needs all the common fields and a complete <code>schedule</code>, even when its schedule is Always. Unused schedule fields still need valid values; use the canonical defaults below. Optional fields should be omitted when unused, not filled with <code>null</code> or empty date strings.</p>
+<p>Do not include <code>etag</code> for a new collection. Set <code>id</code> to <code>0</code>; the importer creates the SharePoint IDs. <code>instructions</code> and <code>chatgptPrompt</code> are optional top-level metadata, but generated collections should normally contain only <code>version</code> and <code>messages</code>. Omit <code>invalidRecords</code>; a backup with damaged raw records cannot be imported until those records are reviewed and repaired.</p>
+<h3 id="common-fields">Common fields</h3>
+<table>
+<thead>
+<tr class="header">
+<th>JSON field</th>
+<th>Required</th>
+<th>Allowed value / meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td>Yes</td>
+<td>Use the number <code>0</code> for generated collections.</td>
+</tr>
+<tr class="even">
+<td><code>title</code></td>
+<td>Yes</td>
+<td>Message text: a nonblank string of 1–255 characters. This is the UI’s Message text field.</td>
+</tr>
+<tr class="odd">
+<td><code>enabled</code></td>
+<td>Yes</td>
+<td><code>true</code> or <code>false</code>. Use <code>true</code> unless requested otherwise.</td>
+</tr>
+<tr class="even">
+<td><code>priority</code></td>
+<td>Yes</td>
+<td>Exactly <code>Normal</code> or <code>Important</code>; use <code>Normal</code> by default.</td>
+</tr>
+<tr class="odd">
+<td><code>emoji</code></td>
+<td>Yes</td>
+<td>Emoji string or <code>""</code>. Use one emoji; the implementation limit is 32 JavaScript string code units.</td>
+</tr>
+<tr class="even">
+<td><code>link</code></td>
+<td>Yes</td>
+<td><code>""</code>, an HTTPS URL, or a site-relative path starting with one <code>/</code>. Maximum 255 characters. No embedded credentials, backslashes or line breaks. Never invent a company destination.</td>
+</tr>
+<tr class="odd">
+<td><code>newTab</code></td>
+<td>Yes</td>
+<td><code>true</code> or <code>false</code>; default <code>false</code>. This is the UI’s Open link in a new tab choice.</td>
+</tr>
+<tr class="even">
+<td><code>schedule</code></td>
+<td>Yes</td>
+<td>A complete object using the fields below.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="schedule-fields">Schedule fields</h3>
+<table>
+<thead>
+<tr class="header">
+<th>JSON field</th>
+<th>Required</th>
+<th>Allowed value / what to fill in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>version</code></td>
+<td>Yes</td>
+<td>Number <code>2</code>, independently of the envelope’s version.</td>
+</tr>
+<tr class="even">
+<td><code>scheduled</code></td>
+<td>Yes</td>
+<td><code>false</code> for Always; <code>true</code> for Scheduled.</td>
+</tr>
+<tr class="odd">
+<td><code>timeZoneMode</code></td>
+<td>Recommended</td>
+<td><code>viewer</code> or <code>fixed</code>. Omission retains legacy fixed-zone behavior.</td>
+</tr>
+<tr class="even">
+<td><code>timeZone</code></td>
+<td>Yes</td>
+<td>A valid IANA zone. Use <code>UTC</code> with <code>viewer</code>, or the requested real zone with <code>fixed</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>anchor</code></td>
+<td>Yes</td>
+<td>A valid <code>YYYY-MM-DD</code> date. Set it equal to <code>start</code> for a new scheduled rule. For Always, use the collection’s start date as a harmless placeholder.</td>
+</tr>
+<tr class="even">
+<td><code>start</code></td>
+<td>Optional</td>
+<td>First eligible date. Include it for every newly generated scheduled rule. If omitted, <code>anchor</code> is the start.</td>
+</tr>
+<tr class="odd">
+<td><code>end</code></td>
+<td>Optional</td>
+<td>For <code>unit: "none"</code>, the last display date. For recurrence, the inclusive series Until date. Omit for no end date.</td>
+</tr>
+<tr class="even">
+<td><code>allDay</code></td>
+<td>Yes</td>
+<td><code>true</code> for whole days; <code>false</code> for a daily clock-time window.</td>
+</tr>
+<tr class="odd">
+<td><code>startTime</code></td>
+<td>Yes</td>
+<td><code>HH:mm</code>. Default <code>09:00</code> for unused all-day fields; use the real start time when <code>allDay</code> is false.</td>
+</tr>
+<tr class="even">
+<td><code>endTime</code></td>
+<td>Yes</td>
+<td><code>HH:mm</code>. Default <code>17:00</code> for unused all-day fields. Timed windows include start and exclude end; end must be later on the same day.</td>
+</tr>
+<tr class="odd">
+<td><code>unit</code></td>
+<td>Yes</td>
+<td>Exactly <code>none</code>, <code>day</code>, <code>week</code>, <code>month</code> or <code>year</code>.</td>
+</tr>
+<tr class="even">
+<td><code>interval</code></td>
+<td>Yes</td>
+<td>Integer <code>1</code>–<code>999</code>. Use <code>1</code> for every day/week/month/year and for unused nonrecurring fields.</td>
+</tr>
+<tr class="odd">
+<td><code>weekdays</code></td>
+<td>Yes</td>
+<td>Array of integers <code>0</code>–<code>6</code>; required to be nonempty for weekly recurrence. Default <code>[1,2,3,4,5]</code> when unused.</td>
+</tr>
+<tr class="even">
+<td><code>pattern</code></td>
+<td>Yes</td>
+<td><code>date</code> or <code>weekday</code>; default <code>date</code> when unused.</td>
+</tr>
+<tr class="odd">
+<td><code>day</code></td>
+<td>Yes</td>
+<td>Integer <code>1</code>–<code>31</code>. Used by monthly/yearly date patterns; default <code>1</code> when unused.</td>
+</tr>
+<tr class="even">
+<td><code>ordinal</code></td>
+<td>Yes</td>
+<td><code>1</code>, <code>2</code>, <code>3</code>, <code>4</code> or <code>-1</code> (last). Used by weekday patterns; default <code>1</code> when unused.</td>
+</tr>
+<tr class="odd">
+<td><code>weekday</code></td>
+<td>Yes</td>
+<td>Integer <code>0</code>–<code>6</code>. Used by monthly/yearly weekday patterns; default <code>1</code> when unused.</td>
+</tr>
+<tr class="even">
+<td><code>month</code></td>
+<td>Yes</td>
+<td>Integer <code>1</code>–<code>12</code>. Used by yearly patterns; default <code>1</code> when unused. Derive it from the intended start date for yearly rules.</td>
+</tr>
+<tr class="odd">
+<td><code>durationDays</code></td>
+<td>Optional</td>
+<td>Inclusive recurring all-day occurrence length: integer <code>1</code>–<code>366</code>. Omit for a single day, nonrecurring events and timed recurrence.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Weekday choices:</strong> Sunday <code>0</code>, Monday <code>1</code>, Tuesday <code>2</code>, Wednesday <code>3</code>, Thursday <code>4</code>, Friday <code>5</code>, Saturday <code>6</code>. These numbers are the import representation; the form displays weekday names.</p>
+<h3 id="canonical-unused-values">Canonical unused values</h3>
+<p>For an Always message, use <code>scheduled: false</code>, <code>allDay: true</code>, <code>unit: "none"</code>, <code>interval: 1</code>, <code>weekdays: [1,2,3,4,5]</code>, <code>pattern: "date"</code>, <code>day: 1</code>, <code>ordinal: 1</code>, <code>weekday: 1</code>, <code>month: 1</code>, <code>startTime: "09:00"</code>, <code>endTime: "17:00"</code>, a valid collection-start <code>anchor</code>, <code>timeZoneMode: "viewer"</code> and <code>timeZone: "UTC"</code>. Omit <code>start</code>, <code>end</code> and <code>durationDays</code>. Keep all common fields, including empty strings for no emoji/link.</p>
+<p>For scheduled rules, start with the same complete object, set <code>scheduled: true</code>, add <code>start</code> and set <code>anchor</code> equal to it, then change only the fields needed by the selected recipe. Do not abbreviate the object down to those changed fields.</p>
+<h2 id="scheduling-recipes">Scheduling recipes</h2>
+<table>
+<thead>
+<tr class="header">
+<th>What you want</th>
+<th>Fields to change in a complete schedule</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Always</td>
+<td><code>scheduled: false</code>; no <code>start</code>, <code>end</code> or <code>durationDays</code>.</td>
+</tr>
+<tr class="even">
+<td>One specific whole day</td>
+<td><code>scheduled: true</code>, <code>start</code> and <code>end</code> both that date, <code>unit: "none"</code>, <code>allDay: true</code>.</td>
+</tr>
+<tr class="odd">
+<td>A nonrecurring date range</td>
+<td><code>start</code> and <code>end</code> bound the inclusive range, <code>unit: "none"</code>. With times enabled, the same clock window is tested on every date in that range.</td>
+</tr>
+<tr class="even">
+<td>Every 2 days</td>
+<td><code>unit: "day"</code>, <code>interval: 2</code>. The first date anchors the interval.</td>
+</tr>
+<tr class="odd">
+<td>Every Monday</td>
+<td><code>unit: "week"</code>, <code>weekdays: [1]</code>, <code>interval: 1</code>.</td>
+</tr>
+<tr class="even">
+<td>Monday–Friday lunchtime</td>
+<td><code>unit: "week"</code>, <code>weekdays: [1,2,3,4,5]</code>, <code>allDay: false</code>, real start/end times.</td>
+</tr>
+<tr class="odd">
+<td>Every other week</td>
+<td><code>unit: "week"</code>, <code>interval: 2</code>, selected weekdays. Weeks run Monday–Sunday and are anchored to the start-date week.</td>
+</tr>
+<tr class="even">
+<td>On the 24th each month</td>
+<td><code>unit: "month"</code>, <code>pattern: "date"</code>, <code>day: 24</code>.</td>
+</tr>
+<tr class="odd">
+<td>On the last Thursday each month</td>
+<td><code>unit: "month"</code>, <code>pattern: "weekday"</code>, <code>ordinal: -1</code>, <code>weekday: 4</code>.</td>
+</tr>
+<tr class="even">
+<td>On the fourth Thursday each month</td>
+<td>Same as above, but <code>ordinal: 4</code>. Fourth and last are not always the same occurrence.</td>
+</tr>
+<tr class="odd">
+<td>Every Christmas, 24–26 December</td>
+<td><code>unit: "year"</code>, <code>pattern: "date"</code>, <code>month: 12</code>, <code>day: 24</code>, <code>allDay: true</code>, <code>durationDays: 3</code>.</td>
+</tr>
+<tr class="even">
+<td>Last Thursday of September each year</td>
+<td><code>unit: "year"</code>, <code>pattern: "weekday"</code>, <code>month: 9</code>, <code>ordinal: -1</code>, <code>weekday: 4</code>.</td>
+</tr>
+<tr class="odd">
+<td>Repeat through a final date</td>
+<td>Add <code>end</code> as the inclusive Until date. Omit it for unlimited recurrence.</td>
+</tr>
+</tbody>
+</table>
+<p>Dates must be real calendar dates. Start must not be after end. The 31st clamps to the last day of a shorter month; an annual February 29 rule uses February 28 in non-leap years. There is no fifth-weekday rule; use first/second/third/fourth/last. Timed messages cannot cross midnight. Multi-day recurring all-day messages can span month/year boundaries.</p>
+<p><strong>End of occurrence versus end of series:</strong> for recurring Christmas, <code>durationDays: 3</code> means each occurrence is 24–26 December. An <code>end</code> date would stop the series itself; it does not define the annual three-day duration. The series cutoff also stops any occurrence that would extend beyond that cutoff.</p>
+<p><strong>One-off versus unbounded:</strong> a scheduled <code>unit: "none"</code> message with no <code>end</code> stays eligible on every date after its start. For a one-off event, always supply the same start/end date or the intended finite range.</p>
+<h2 id="holidays-personal-events-and-links">Holidays, personal events and links</h2>
+<ul>
+<li>Fixed-date holidays can use yearly recurrence. Verify local observance rules before choosing the date.</li>
+<li>Movable holidays such as Easter need verified dates for each requested year and finite <code>unit: "none"</code> entries. Do not repeat last year’s date annually. If the assistant cannot verify the dates, it should ask for them.</li>
+<li>Seasons depend on the country/hemisphere and on meteorological versus astronomical definitions. The summer example below uses Northern Hemisphere meteorological summer on 1 June. Do not assume it suits every customer.</li>
+<li>Individual birthdays, employee anniversaries and first-week welcomes belong in MyGreeting’s personal-moment settings. Imported workplace messages are shared among people who can view the connected list, not individually targeted. Generic date-column lookup from another list, audience filters, Outlook-calendar synchronization and per-occurrence exceptions are not supported by this import format.</li>
+<li>Prefer practical, positive messages. Timesheet reminders can be linked, but leave <code>link</code> empty until a real destination is supplied. The example collection deliberately has no invented timesheet link.</li>
+</ul>
+<h2 id="complete-example-collection">Complete example collection</h2>
+<p>The eight examples demonstrate Always, weekly, timed, yearly, multi-day, last-weekday and one-off schedules. They are illustrative, not a recommendation to import everything. Dates are explicit examples for 2026/2027: change the year/start dates for your collection, remove unwanted examples, set real links, and review priorities. All examples are enabled. The Important Christmas message takes precedence over Normal messages during its eligible days.</p>
+<details class="json-example"><summary>Show the complete version 2 JSON examples</summary><pre class="json"><code>{
+  &quot;version&quot;: 2,
+  &quot;messages&quot;: [
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Small steps count. You’ve got this!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;🌱&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: false,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-05&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;none&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;New week, fresh start. You’ve got this!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;💪&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-05&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;week&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1,
+        &quot;start&quot;: &quot;2026-10-05&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;It’s lunchtime! Enjoy a well-earned break.&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;🍽️&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-05&quot;,
+        &quot;allDay&quot;: false,
+        &quot;startTime&quot;: &quot;12:00&quot;,
+        &quot;endTime&quot;: &quot;13:00&quot;,
+        &quot;unit&quot;: &quot;week&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1,
+        &quot;start&quot;: &quot;2026-10-05&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Don’t forget to book your hours!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;⏱️&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-09&quot;,
+        &quot;allDay&quot;: false,
+        &quot;startTime&quot;: &quot;15:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;week&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1,
+        &quot;start&quot;: &quot;2026-10-09&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Merry Christmas!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Important&quot;,
+      &quot;emoji&quot;: &quot;🎄&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-12-24&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;year&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 24,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 12,
+        &quot;start&quot;: &quot;2026-12-24&quot;,
+        &quot;durationDays&quot;: 3
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;It’s finally summer! Time for sunshine and ice cream.&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;🍦&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2027-06-01&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;year&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 6,
+        &quot;start&quot;: &quot;2027-06-01&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Team catch-up today. Bring your ideas!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;💡&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-29&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;month&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;weekday&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: -1,
+        &quot;weekday&quot;: 4,
+        &quot;month&quot;: 1,
+        &quot;start&quot;: &quot;2026-10-29&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Team lunch today. See you there!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;🍽️&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: true,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-15&quot;,
+        &quot;allDay&quot;: false,
+        &quot;startTime&quot;: &quot;12:00&quot;,
+        &quot;endTime&quot;: &quot;13:00&quot;,
+        &quot;unit&quot;: &quot;none&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1,
+        &quot;start&quot;: &quot;2026-10-15&quot;,
+        &quot;end&quot;: &quot;2026-10-15&quot;
+      }
+    }
+  ]
+}</code></pre></details>
+<h2 id="ai-delivery-checklist">AI delivery checklist</h2>
+<ol type="1">
+<li>Output envelope version <code>2</code> and complete message/schedule objects; never output the proposed version <code>3</code> names such as <code>message</code>, <code>show</code> or <code>repeat</code>.</li>
+<li>Include every required common and schedule field, with the exact allowed choices and value types. Use actual booleans and numbers.</li>
+<li>Set <code>id: 0</code>, omit <code>etag</code>, and do not include damaged backup <code>invalidRecords</code>.</li>
+<li>Verify title/link limits, safe actual links, real calendar dates, the start/end order and same-day time windows.</li>
+<li>Ensure weekly rules have selected days, monthly/yearly patterns agree with the requested occurrence, and yearly month/day are correct.</li>
+<li>Keep recurring series <code>end</code> omitted unless requested; use <code>durationDays</code> for multi-day all-day occurrences.</li>
+<li>Check time-zone intent, priority effects, movable holidays and the requested country/year.</li>
+<li>Provide a plain-language review table and one valid <code>.json</code> file. Do not silently include unused examples or claim the assistant imported anything into the customer’s tenant.</li>
+</ol>
+<p>This guide helps an AI produce valid data; it does not guarantee that every AI output is correct. The importer performs its own validation. Review the generated collection before importing.</p>
+<h2 id="import-results-and-recovery">Import results and recovery</h2>
+<p>The importer adds messages to the currently connected list; it does not overwrite existing messages. Identical records are skipped, including on a retry after a partial failure. Different wording, priority, link or scheduling settings can create a new record, so importing a revised message does not edit its earlier copy. Review or disable the older item through Manage messages.</p>
+<p>Keep JSON files under 2,000,000 bytes and collections to at most 5,000 messages. A malformed file is rejected before records are created. A later SharePoint failure can stop an otherwise-valid import after some records have been added; the result reports progress and a retry skips identical records already imported.</p>
+<p>Export existing messages before administrative changes. If the list is missing, restore it from SharePoint’s recycle bin, reconnect the correct list, or explicitly create a replacement and import a backup. Repair can restore missing columns/form setup but cannot reconstruct deleted values without a backup. Do not delete a working list to retry import.</p>
+<h2 id="version-and-maintenance">Version and maintenance</h2>
+<p>This guide describes format 2 as implemented by MyGreeting 1.15.3, including viewer-local scheduling introduced in 1.15.1. It is a self-contained instruction file for users and assistants. Future formats must receive a separately identified guide; keep existing-format documentation available for older installations.</p>
+<p>Public guide: <a href="https://lemnitec.github.io/docs/workplace-messages/format-2/">https://lemnitec.github.io/docs/workplace-messages/format-2/</a></p>
+<p>Lemnitec support: <a href="https://lemnitec.github.io/support/">https://lemnitec.github.io/support/</a></p>
+</article></div></main><footer class="site-footer"><div class="footer-inner"><span>© 2026 Lemnitec</span><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/support/">Support</a></span></div></footer><script src="guide.js" defer></script></body></html>

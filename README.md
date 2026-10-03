@@ -18,3 +18,8 @@ The site contains plain HTML and CSS so it can be served directly by GitHub Page
 In the repository settings, configure GitHub Pages to deploy from the `main` branch and repository root. After merging a change, verify every public HTTPS URL before referencing it in a Microsoft Marketplace submission.
 
 Legal pages must be reviewed and approved by an authorised Lemnitec representative before publication.
+
+
+## Workplace-message guide
+
+The canonical Markdown and generator are maintained in the MyGreeting app repository (`docs/MyGreeting-AI-guide.md`, `npm run docs:messages`). Commit the generated `docs/workplace-messages/` files here. GitHub Pages serves these committed files without a build dependency. Format 2 has a pinned page and downloadable Markdown; keep older format guides available when a new format is introduced.
