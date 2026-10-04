@@ -1,37 +1,60 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create workplace messages with AI | Lemnitec</title><meta name="description" content="Create importable MyGreeting workplace messages with AI. Download the Markdown guide, copy a prompt and learn the exact JSON format."><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/docs/workplace-messages/format-2/guide.css"></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><nav class="nav" aria-label="Main navigation"><a class="brand" href="/">Lemnitec</a><div class="nav-links"><a href="/docs/installation/">Install</a><a href="/docs/admin/">Admin guide</a><a href="/support/">Support</a></div></nav></header><main id="main"><section class="hero"><div class="hero-inner"><div class="eyebrow">MyGreeting · import format 2</div><h1>Create workplace messages with AI</h1><p class="lead">Download one guide, tell your AI assistant what your company needs, and import the resulting message collection into SharePoint.</p><div class="actions"><a class="button" href="MyGreeting-AI-guide.md" download="MyGreeting-AI-guide.md">Download AI guide (.md)</a><button class="button secondary" type="button" data-copy-prompt>Copy AI prompt</button><a class="button secondary" href="#start-here">How it works</a></div></div></section><div class="content guide-layout"><aside class="guide-contents"><nav aria-label="On this page"><strong>On this page</strong><a href="#start-here">Start here</a><a href="#ready-to-copy-prompt">Ready-to-copy prompt</a><a href="#what-you-decide">What you decide</a><a href="#time-zones-choose-the-right-meaning">Time zones: choose the right meaning</a><a href="#the-file-the-app-accepts">The file the app accepts</a><a href="#scheduling-recipes">Scheduling recipes</a><a href="#holidays-personal-events-and-links">Holidays, personal events and links</a><a href="#complete-example-collection">Complete example collection</a><a href="#ai-delivery-checklist">AI delivery checklist</a><a href="#import-results-and-recovery">Import results and recovery</a><a href="#version-and-maintenance">Version and maintenance</a></nav></aside><article class="guide-body"><p><strong>Import format: 2 · Minimum app version: 1.15.1 · Checked with app version: 1.15.3 · Updated: 3 October 2026</strong></p>
-<p>Create a whole message collection with ChatGPT or another AI assistant, then import the resulting JSON into MyGreeting. This guide is for company administrators and AI assistants. It describes the format the app actually accepts.</p>
-<p>You do not need to learn JSON to use the AI route. Decide what employees should see and when. The assistant fills in the technical fields using the rules below.</p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Workplace message import guide | Lemnitec</title><meta name="description" content="Import workplace messages into MyGreeting. Follow the quick start, working JSON examples, field reference and troubleshooting guide."><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/docs/workplace-messages/format-2/guide.css"></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><nav class="nav" aria-label="Main navigation"><a class="brand" href="/">Lemnitec</a><div class="nav-links"><a href="/docs/installation/">Install</a><a href="/docs/admin/">Admin guide</a><a href="/support/">Support</a></div></nav></header><main id="main"><section class="hero"><div class="hero-inner"><div class="eyebrow">MyGreeting · import format 2</div><h1>Workplace message import guide</h1><p class="lead">Prepare a JSON collection, check its messages and schedules, and import it into your SharePoint message list.</p><div class="actions"><a class="button" href="MyGreeting-message-guide.md" download="MyGreeting-message-guide.md">Download guide (.md)</a><a class="button secondary" href="#start-here">How it works</a></div></div></section><div class="content guide-layout"><aside class="guide-contents"><nav aria-label="On this page"><strong>On this page</strong><a href="#start-here">Start here</a><a href="#a-working-first-file">A working first file</a><a href="#what-you-decide">What you decide</a><a href="#time-zones-choose-the-right-meaning">Time zones: choose the right meaning</a><a href="#the-file-the-app-accepts">The file the app accepts</a><a href="#scheduling-recipes">Scheduling recipes</a><a href="#holidays-personal-events-and-links">Holidays, personal events and links</a><a href="#complete-example-collection">Complete example collection</a><a href="#before-you-import">Before you import</a><a href="#troubleshooting">Troubleshooting</a><a href="#import-results-and-recovery">Import results and recovery</a><a href="#version-and-maintenance">Version and maintenance</a></nav></aside><article class="guide-body"><p><strong>Import format: 2 · Minimum app version: 1.15.1 · Checked with app version: 1.15.4 · Updated: 3 October 2026</strong></p>
+<p>Create and import workplace-message collections for MyGreeting. Use this guide to prepare a JSON file yourself, with a text editor, or with any tool that can produce JSON. The same field names and scheduling rules apply to every file.</p>
 <h2 id="start-here">Start here</h2>
 <ol type="1">
-<li>Download this Markdown guide (<code>MyGreeting-AI-guide.md</code>).</li>
-<li>Upload the guide to ChatGPT or another assistant that can read text files. A website link alone may not be accessible to every assistant; uploading the file is more reliable.</li>
-<li>Copy the prompt below, fill in what you know, and ask for your collection. The assistant should ask only for missing information that changes the messages or schedule.</li>
-<li>Ask it to provide a downloadable <code>.json</code> file. Review its plain-language schedule summary before importing.</li>
-<li>In SharePoint, edit the page, select MyGreeting, open <strong>Edit properties → Workplace messages</strong>, and connect or create the message list.</li>
-<li>Choose <strong>Import messages</strong>, select the JSON file, and read the result. Save/publish the homepage if you changed its list connection, then reload the page.</li>
+<li>In SharePoint, edit the page, select MyGreeting and open <strong>Edit properties → Workplace messages</strong>. Create or connect a message list.</li>
+<li><strong>Export messages</strong> to keep a backup if the list already contains messages.</li>
+<li>Copy the working example below into a plain-text file named <code>workplace-messages.json</code>. Change its message text, emoji and priority. Keep the complete schedule object.</li>
+<li>To schedule a message, follow the scheduling recipes and field reference. Review the text, dates, times, time zone and links before importing.</li>
+<li>Select <strong>Import messages</strong>, choose the <code>.json</code> file and read the result. Save/publish the homepage if its list connection changed, then reload the page.</li>
 </ol>
-<p>The Markdown guide is an instruction file. <strong>Import messages accepts the generated JSON file, not this Markdown file.</strong> MyGreeting validates the whole collection before adding records. It does not offer a separate pre-import preview in the current release, so review the assistant’s summary first.</p>
-<h2 id="ready-to-copy-prompt">Ready-to-copy prompt</h2>
-<p>Upload this guide, then paste the following. Replace the bracketed entries you know; you can leave others for the assistant to ask about.</p>
-<!-- AI_PROMPT_START -->
-
-<label class="prompt-label" for="ai-prompt">Copy this prompt after uploading the guide to your AI assistant.</label><textarea id="ai-prompt" rows="14" readonly>Read the attached MyGreeting guide and create an importable workplace-message collection using its exact version 2 format.
-
-Company or audience: [who the messages are for]
-Country and language: [country; preferred language and tone]
-Period: [year and when the collection should start]
-Messages to include: [holidays, seasons, Monday encouragement, lunch, timesheets, company events, or your own ideas]
-Working days and hours: [for example Monday–Friday, lunch 12:00–13:00]
-Time zone: [each viewer’s local time, or a named fixed time zone]
-Links: [real destinations, or no links]
-
-Ask only for missing information that affects the content or schedule. Use the guide’s defaults for the technical fields. Do not invent company URLs or events. Verify dates for movable holidays for the requested year; if you cannot verify them, ask me for the dates. Do not create global birthday messages for individual employees.
-
-First show a concise table of the messages, priorities, dates, times, recurrence and links so I can review the collection. Then provide one downloadable .json file containing only the approved or requested messages, using the exact field names and complete message/schedule objects in this guide. If file creation is unavailable, provide one valid JSON code block I can save as a .json file.
-
-Before delivering, check all required fields, allowed choices, date/time boundaries and recurrence patterns against this guide. Do not use the proposed version 3 format, comments, placeholders, abbreviated schedule objects or unsupported fields.</textarea><div class="actions"><button class="button" type="button" data-copy-prompt>Copy AI prompt</button></div><p id="copy-status" role="status" aria-live="polite"></p>
-<!-- AI_PROMPT_END -->
-
+<p>The downloadable Markdown file is this guide. <strong>Import messages accepts JSON, not Markdown.</strong> The app validates the whole collection before adding records. There is no separate import-preview screen; check your file before importing.</p>
+<h2 id="a-working-first-file">A working first file</h2>
+<p>This adds one Normal message that is always eligible. Copy it as a complete file. <code>title</code> is the message text. An empty <code>link</code> means the message is not a link. <code>id: 0</code> requests a new item; it does not identify an existing list item to update.</p>
+<pre class="json"><code>{
+  &quot;version&quot;: 2,
+  &quot;messages&quot;: [
+    {
+      &quot;id&quot;: 0,
+      &quot;title&quot;: &quot;Small steps count. You’ve got this!&quot;,
+      &quot;enabled&quot;: true,
+      &quot;priority&quot;: &quot;Normal&quot;,
+      &quot;emoji&quot;: &quot;🌱&quot;,
+      &quot;link&quot;: &quot;&quot;,
+      &quot;newTab&quot;: false,
+      &quot;schedule&quot;: {
+        &quot;version&quot;: 2,
+        &quot;scheduled&quot;: false,
+        &quot;timeZone&quot;: &quot;UTC&quot;,
+        &quot;timeZoneMode&quot;: &quot;viewer&quot;,
+        &quot;anchor&quot;: &quot;2026-10-05&quot;,
+        &quot;allDay&quot;: true,
+        &quot;startTime&quot;: &quot;09:00&quot;,
+        &quot;endTime&quot;: &quot;17:00&quot;,
+        &quot;unit&quot;: &quot;none&quot;,
+        &quot;interval&quot;: 1,
+        &quot;weekdays&quot;: [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        &quot;pattern&quot;: &quot;date&quot;,
+        &quot;day&quot;: 1,
+        &quot;ordinal&quot;: 1,
+        &quot;weekday&quot;: 1,
+        &quot;month&quot;: 1
+      }
+    }
+  ]
+}</code></pre>
+<p>Change <code>title</code> to your own sentence and choose an emoji or an empty string. To add more messages, put another complete message object in the <code>messages</code> array, separated by a comma. Keep the outer <code>version</code> as the number <code>2</code>.</p>
+<h3 id="editing-json">Editing JSON</h3>
+<p>Use double quotes for names and text, actual booleans (<code>true</code> / <code>false</code>) and numbers without quotes. JSON does not accept comments, trailing commas, <code>undefined</code> or Markdown fences. Save the file as UTF-8 with a <code>.json</code> extension.</p>
+<p>An optional <a href="https://lemnitec.github.io/docs/workplace-messages/format-2/message-import.schema.json">JSON Schema</a> provides field descriptions, allowed-value suggestions and structural checks in editors such as Visual Studio Code. Add this property alongside <code>version</code> and <code>messages</code> to associate your file with it:</p>
+<pre class="text"><code>&quot;$schema&quot;: &quot;https://lemnitec.github.io/docs/workplace-messages/format-2/message-import.schema.json&quot;</code></pre>
+<p>The <code>$schema</code> property is optional and ignored by the importer. The schema describes recommended new collections, including complete unused fields. The app remains the final validator: editor checks cannot establish a valid time zone, date ordering, same-day time ordering or SharePoint permissions. Older exported backups remain accepted by the app.</p>
 <h2 id="what-you-decide">What you decide</h2>
 <table>
 <thead>
@@ -338,14 +361,14 @@ Before delivering, check all required fields, allowed choices, date/time boundar
 <h2 id="holidays-personal-events-and-links">Holidays, personal events and links</h2>
 <ul>
 <li>Fixed-date holidays can use yearly recurrence. Verify local observance rules before choosing the date.</li>
-<li>Movable holidays such as Easter need verified dates for each requested year and finite <code>unit: "none"</code> entries. Do not repeat last year’s date annually. If the assistant cannot verify the dates, it should ask for them.</li>
+<li>Movable holidays such as Easter need verified dates for each requested year and finite <code>unit: "none"</code> entries. Do not repeat last year’s date annually. Use a confirmed date for the intended country and year.</li>
 <li>Seasons depend on the country/hemisphere and on meteorological versus astronomical definitions. The summer example below uses Northern Hemisphere meteorological summer on 1 June. Do not assume it suits every customer.</li>
 <li>Individual birthdays, employee anniversaries and first-week welcomes belong in MyGreeting’s personal-moment settings. Imported workplace messages are shared among people who can view the connected list, not individually targeted. Generic date-column lookup from another list, audience filters, Outlook-calendar synchronization and per-occurrence exceptions are not supported by this import format.</li>
 <li>Prefer practical, positive messages. Timesheet reminders can be linked, but leave <code>link</code> empty until a real destination is supplied. The example collection deliberately has no invented timesheet link.</li>
 </ul>
 <h2 id="complete-example-collection">Complete example collection</h2>
 <p>The eight examples demonstrate Always, weekly, timed, yearly, multi-day, last-weekday and one-off schedules. They are illustrative, not a recommendation to import everything. Dates are explicit examples for 2026/2027: change the year/start dates for your collection, remove unwanted examples, set real links, and review priorities. All examples are enabled. The Important Christmas message takes precedence over Normal messages during its eligible days.</p>
-<details class="json-example"><summary>Show the complete version 2 JSON examples</summary><pre class="json"><code>{
+<details class="json-example"><summary>Show complete example collection</summary><pre class="json"><code>{
   &quot;version&quot;: 2,
   &quot;messages&quot;: [
     {
@@ -615,24 +638,67 @@ Before delivering, check all required fields, allowed choices, date/time boundar
     }
   ]
 }</code></pre></details>
-<h2 id="ai-delivery-checklist">AI delivery checklist</h2>
+<h2 id="before-you-import">Before you import</h2>
 <ol type="1">
-<li>Output envelope version <code>2</code> and complete message/schedule objects; never output the proposed version <code>3</code> names such as <code>message</code>, <code>show</code> or <code>repeat</code>.</li>
+<li>Output envelope version <code>2</code> and complete message/schedule objects; use <code>title</code> for message text and the documented schedule field names.</li>
 <li>Include every required common and schedule field, with the exact allowed choices and value types. Use actual booleans and numbers.</li>
 <li>Set <code>id: 0</code>, omit <code>etag</code>, and do not include damaged backup <code>invalidRecords</code>.</li>
 <li>Verify title/link limits, safe actual links, real calendar dates, the start/end order and same-day time windows.</li>
 <li>Ensure weekly rules have selected days, monthly/yearly patterns agree with the requested occurrence, and yearly month/day are correct.</li>
 <li>Keep recurring series <code>end</code> omitted unless requested; use <code>durationDays</code> for multi-day all-day occurrences.</li>
 <li>Check time-zone intent, priority effects, movable holidays and the requested country/year.</li>
-<li>Provide a plain-language review table and one valid <code>.json</code> file. Do not silently include unused examples or claim the assistant imported anything into the customer’s tenant.</li>
+<li>Include only the messages you intend to add. Save one valid <code>.json</code> file.</li>
 </ol>
-<p>This guide helps an AI produce valid data; it does not guarantee that every AI output is correct. The importer performs its own validation. Review the generated collection before importing.</p>
+<p>The importer performs its own validation. Review every collection before importing, whichever tool prepared it.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Invalid JSON / invalid backup</td>
+<td>Check the outer <code>version: 2</code> and <code>messages</code> array. Remove comments, trailing commas and code fences.</td>
+</tr>
+<tr class="even">
+<td>Incomplete schedule</td>
+<td>Copy a complete schedule, including unused required fields. Check exact field names and types against the reference.</td>
+</tr>
+<tr class="odd">
+<td>Invalid recurrence / dates / times</td>
+<td>Check real dates, start before end, nonempty weekly days and start time before end time on the same day.</td>
+</tr>
+<tr class="even">
+<td>Import stops after adding some messages</td>
+<td>Read the reported error, resolve permissions or connection problems, then retry the same file. Identical records are skipped.</td>
+</tr>
+<tr class="odd">
+<td>An imported message does not appear</td>
+<td>Check Enabled, the schedule and time zone, higher-priority messages and personal moments; reload the page.</td>
+</tr>
+<tr class="even">
+<td>List setup needs repair</td>
+<td>Open web part properties. Repair appears only after the setup check identifies missing columns, form bindings or default-view columns it can restore.</td>
+</tr>
+<tr class="odd">
+<td>List deleted or access denied</td>
+<td>Restore/reconnect/create a replacement, or ask for access. Repair cannot restore a deleted list or grant permission.</td>
+</tr>
+<tr class="even">
+<td>A column has an incompatible type or another form is attached</td>
+<td>Ask an administrator to resolve the conflict. Automatic repair does not replace conflicting fields or forms.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="import-results-and-recovery">Import results and recovery</h2>
 <p>The importer adds messages to the currently connected list; it does not overwrite existing messages. Identical records are skipped, including on a retry after a partial failure. Different wording, priority, link or scheduling settings can create a new record, so importing a revised message does not edit its earlier copy. Review or disable the older item through Manage messages.</p>
 <p>Keep JSON files under 2,000,000 bytes and collections to at most 5,000 messages. A malformed file is rejected before records are created. A later SharePoint failure can stop an otherwise-valid import after some records have been added; the result reports progress and a retry skips identical records already imported.</p>
 <p>Export existing messages before administrative changes. If the list is missing, restore it from SharePoint’s recycle bin, reconnect the correct list, or explicitly create a replacement and import a backup. Repair can restore missing columns/form setup but cannot reconstruct deleted values without a backup. Do not delete a working list to retry import.</p>
 <h2 id="version-and-maintenance">Version and maintenance</h2>
-<p>This guide describes format 2 as implemented by MyGreeting 1.15.3, including viewer-local scheduling introduced in 1.15.1. It is a self-contained instruction file for users and assistants. Future formats must receive a separately identified guide; keep existing-format documentation available for older installations.</p>
+<p>This guide describes format 2 as implemented by MyGreeting 1.15.4, including viewer-local scheduling introduced in 1.15.1. It is a self-contained reference for preparing import files. Future formats must receive a separately identified guide; keep existing-format documentation available for older installations.</p>
 <p>Public guide: <a href="https://lemnitec.github.io/docs/workplace-messages/format-2/">https://lemnitec.github.io/docs/workplace-messages/format-2/</a></p>
 <p>Lemnitec support: <a href="https://lemnitec.github.io/support/">https://lemnitec.github.io/support/</a></p>
-</article></div></main><footer class="site-footer"><div class="footer-inner"><span>© 2026 Lemnitec</span><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/support/">Support</a></span></div></footer><script src="guide.js" defer></script></body></html>
+</article></div></main><footer class="site-footer"><div class="footer-inner"><span>© 2026 Lemnitec</span><span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/support/">Support</a></span></div></footer></body></html>

@@ -1,0 +1,306 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lemnitec.github.io/docs/workplace-messages/format-2/message-import.schema.json",
+  "title": "MyGreeting workplace-message collection (format 2)",
+  "description": "Authoring schema for new collections. Calendar validity, IANA zones, ordering, UTF-16 lengths and SharePoint access are additionally checked by the app. Defaults document suggestions; the importer does not insert them.",
+  "type": "object",
+  "required": [
+    "version",
+    "messages"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 2
+    },
+    "messages": {
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "enabled",
+          "priority",
+          "emoji",
+          "link",
+          "newTab",
+          "schedule"
+        ],
+        "properties": {
+          "id": {
+            "description": "Use 0 for a new message. Imports add items; they do not update items by id.",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "title": {
+            "description": "Message text beside the greeting. Must contain non-whitespace text.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "\\S"
+          },
+          "enabled": {
+            "description": "Whether the message can be selected.",
+            "type": "boolean",
+            "default": true
+          },
+          "priority": {
+            "description": "Important takes precedence over Normal; equal eligible priorities rotate on reload.",
+            "enum": [
+              "Normal",
+              "Important"
+            ],
+            "default": "Normal"
+          },
+          "emoji": {
+            "description": "Emoji or empty string. App limit: 32 UTF-16 code units.",
+            "type": "string",
+            "maxLength": 32,
+            "default": ""
+          },
+          "link": {
+            "description": "Empty string, HTTPS URL without credentials, or site-relative path beginning with one slash. App also validates the destination.",
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^(?:$|[Hh][Tt][Tt][Pp][Ss]://[^\\\\\\r\\n\\t]+|/(?!/)[^\\\\\\r\\n\\t]*)$",
+            "default": ""
+          },
+          "newTab": {
+            "description": "Open a linked message in a new tab.",
+            "type": "boolean",
+            "default": true
+          },
+          "schedule": {
+            "type": "object",
+            "description": "Keep all required fields even when unused; defaults are suggestions and are not inserted by the importer.",
+            "required": [
+              "version",
+              "scheduled",
+              "timeZone",
+              "anchor",
+              "allDay",
+              "startTime",
+              "endTime",
+              "unit",
+              "interval",
+              "weekdays",
+              "pattern",
+              "day",
+              "ordinal",
+              "weekday",
+              "month"
+            ],
+            "properties": {
+              "version": {
+                "description": "Schedule format version.",
+                "const": 2
+              },
+              "scheduled": {
+                "description": "false: Always; true: Scheduled.",
+                "type": "boolean",
+                "default": false
+              },
+              "timeZone": {
+                "description": "IANA time zone, e.g. Europe/Amsterdam. Use UTC for the unused zone in viewer mode.",
+                "type": "string",
+                "minLength": 1,
+                "default": "UTC"
+              },
+              "timeZoneMode": {
+                "description": "viewer uses each viewer’s device zone; fixed uses timeZone. Omitted means fixed for older backups.",
+                "enum": [
+                  "viewer",
+                  "fixed"
+                ],
+                "default": "viewer"
+              },
+              "anchor": {
+                "description": "Real calendar date, YYYY-MM-DD; the app also checks calendar validity.",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "start": {
+                "description": "Real calendar date, YYYY-MM-DD; the app also checks calendar validity.",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "end": {
+                "description": "Optional inclusive final date. Omit for unlimited recurrence; for a one-off supply its final date.",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "allDay": {
+                "description": "true hides time controls; false uses startTime/endTime.",
+                "type": "boolean",
+                "default": true
+              },
+              "startTime": {
+                "description": "24-hour local time, HH:mm. Timed windows must end later on the same day.",
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+                "default": "09:00"
+              },
+              "endTime": {
+                "description": "24-hour local time, HH:mm. Timed windows must end later on the same day.",
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+                "default": "17:00"
+              },
+              "unit": {
+                "description": "Recurrence frequency. none means no recurrence; supply end for a finite one-off.",
+                "enum": [
+                  "none",
+                  "day",
+                  "week",
+                  "month",
+                  "year"
+                ],
+                "default": "none"
+              },
+              "interval": {
+                "description": "Repeat every X units.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 999,
+                "default": 1
+              },
+              "weekdays": {
+                "description": "Weekly days: Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                  ]
+                },
+                "default": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              },
+              "pattern": {
+                "description": "Monthly/yearly rule: calendar date or ordinal weekday.",
+                "enum": [
+                  "date",
+                  "weekday"
+                ],
+                "default": "date"
+              },
+              "day": {
+                "description": "Day of month; shorter months clamp to their final day.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 31,
+                "default": 1
+              },
+              "ordinal": {
+                "description": "1=first, 2=second, 3=third, 4=fourth, -1=last.",
+                "enum": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  -1
+                ],
+                "default": 1
+              },
+              "weekday": {
+                "description": "Ordinal weekday: Sunday=0 through Saturday=6.",
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "default": 1
+              },
+              "month": {
+                "description": "Yearly month: January=1 through December=12.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12,
+                "default": 1
+              },
+              "durationDays": {
+                "description": "Optional inclusive all-day occurrence length; omit for one day. Timed messages permit only 1.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 366
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "scheduled": {
+                      "const": true
+                    },
+                    "unit": {
+                      "const": "week"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "weekdays": {
+                      "minItems": 1
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "scheduled": {
+                      "const": true
+                    },
+                    "allDay": {
+                      "const": false
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "durationDays": {
+                      "const": 1
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "etag": {
+            "description": "Exported item version; omit when authoring new messages.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "invalidRecords": {
+      "description": "Only an empty array is safe to import. Damaged exported records require review.",
+      "type": "array",
+      "maxItems": 0
+    }
+  },
+  "additionalProperties": false
+}

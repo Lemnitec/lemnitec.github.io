@@ -22,4 +22,4 @@ Legal pages must be reviewed and approved by an authorised Lemnitec representati
 
 ## Workplace-message guide
 
-The canonical Markdown and generator are maintained in the MyGreeting app repository (`docs/MyGreeting-AI-guide.md`, `npm run docs:messages`). Commit the generated `docs/workplace-messages/` files here. GitHub Pages serves these committed files without a build dependency. Format 2 has a pinned page and downloadable Markdown; keep older format guides available when a new format is introduced.
+The canonical Markdown and generator are maintained in the MyGreeting app repository (`docs/MyGreeting-message-guide.md`, `npm run docs:messages`). Commit the generated `docs/workplace-messages/` files here. GitHub Pages serves these committed files without a build dependency. Format 2 has a pinned page and downloadable Markdown and optional authoring JSON Schema; keep older format guides available when a new format is introduced.
