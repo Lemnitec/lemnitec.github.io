@@ -1,6 +1,6 @@
 # Create workplace messages for MyGreeting
 
-**Import format: 2 · Minimum app version: 1.15.1 · Checked with app version: 1.15.4 · Updated: 3 October 2026**
+**Import format: 2 · Minimum app version: 1.15.1 · Checked with app version: 1.15.5 · Updated: 4 October 2026**
 
 Create and import workplace-message collections for MyGreeting. Use this guide to prepare a JSON file yourself, with a text editor, or with any tool that can produce JSON. The same field names and scheduling rules apply to every file.
 
@@ -497,7 +497,7 @@ Export existing messages before administrative changes. If the list is missing, 
 
 ## Version and maintenance
 
-This guide describes format 2 as implemented by MyGreeting 1.15.4, including viewer-local scheduling introduced in 1.15.1. It is a self-contained reference for preparing import files. Future formats must receive a separately identified guide; keep existing-format documentation available for older installations.
+This guide describes format 2 as implemented by MyGreeting 1.15.5, including viewer-local scheduling introduced in 1.15.1. It is a self-contained reference for preparing import files. Future formats must receive a separately identified guide; keep existing-format documentation available for older installations.
 
 Public guide: https://lemnitec.github.io/docs/workplace-messages/format-2/
 
